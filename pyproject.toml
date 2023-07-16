@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "image-deleter"
 version = "0.1.0"
-description = ""
+description = "A CLI tool written in python that deletes all files with a specified filetype in a given folder recursively"
 authors = ["Peter Trost <p.trost93@gmail.com>"]
 readme = "README.md"
 packages = [{include = "image_deleter"}]
