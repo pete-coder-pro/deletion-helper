@@ -20,17 +20,17 @@ jobs:
           dependency-groups: "root,dev,test,build"
       - name: Run pytest
         run: poetry run pytest --junitxml=test-results.xml --cov=deletion_helper --cov-report=html
-        continue-on-error: true
       - name: Run ruff
+        if: success() || failure()
         run: poetry run ruff check .
-        continue-on-error: true
       - name: Run black
+        if: success() || failure()
         run: poetry run black --check --diff .
-        continue-on-error: true
       - name: Run mypy
+        if: success() || failure()
         run: poetry run mypy deletion_helper
-        continue-on-error: true
       - name: Archive pytest results
+        if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
           name: pytest-results
