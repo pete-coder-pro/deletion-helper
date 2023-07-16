@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        uses: ./.github/actions/install-dependencies/action.yml
+        uses: ./.github/actions/install-dependencies
         with:
           dependency-groups: "root,dev,test,build"
       - name: Run pytest
