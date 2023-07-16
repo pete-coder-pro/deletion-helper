@@ -1,0 +1,25 @@
+name: Install Dependencies
+
+on:
+  workflow_call:
+    inputs:
+      dependency-groups:
+        required: true
+        type: string
+
+jobs:
+  install-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.4.2
+      - name: Install dependencies
+        run: poetry install --only ${{ inputs.dependency-groups }}
