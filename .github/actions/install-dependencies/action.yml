@@ -1,25 +1,30 @@
-name: Install Dependencies
+name: 'Install Dependencies'
+description: 'Install dependencies using Poetry'
 
-on:
-  workflow_call:
-    inputs:
-      dependency-groups:
-        required: true
-        type: string
+inputs:
+  dependency-groups:
+    description: 'Poetry dependency groups to install'
+    required: true
 
-jobs:
-  install-dependencies:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.4.2
-      - name: Install dependencies
-        run: poetry install --only ${{ inputs.dependency-groups }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      shell: bash
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+      shell: bash
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: '1.4.2'
+      shell: bash
+
+    - name: Install dependencies
+      run: poetry install --only ${{ inputs.dependency-groups }}
+      shell: bash
