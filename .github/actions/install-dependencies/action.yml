@@ -11,19 +11,16 @@ runs:
   steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      shell: bash
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
-      shell: bash
 
     - name: Install Poetry
       uses: snok/install-poetry@v1
       with:
         version: '1.4.2'
-      shell: bash
 
     - name: Install dependencies
       run: poetry install --only ${{ inputs.dependency-groups }}
