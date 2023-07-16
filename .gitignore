@@ -164,3 +164,6 @@ cython_debug/
 
 # Ignore local test file directory
 test/
+
+# Ruff cache
+.ruff_cache/
