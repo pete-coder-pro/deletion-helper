@@ -14,15 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.4.2
       - name: Install dependencies
-        run: poetry install --only root,build
+        uses: ./.github/workflows/install-dependencies.yml
+        with:
+          dependency-groups: "root,build"
       - name: Bundle
         run: scripts/bundle.sh
       - name: Archive production artifacts
