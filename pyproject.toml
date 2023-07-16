@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "image-deleter"
+version = "0.1.0"
+description = ""
+authors = ["Peter Trost <p.trost93@gmail.com>"]
+readme = "README.md"
+packages = [{include = "image_deleter"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+click = "^8.1.5"
+pytest = "^7.4.0"
+pytest-mock = "^3.11.1"
+pytest-cov = "^4.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+ruff = "^0.0.278"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
