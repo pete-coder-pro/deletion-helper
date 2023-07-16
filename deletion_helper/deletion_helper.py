@@ -1,31 +1,26 @@
 from pathlib import Path
-from types import ModuleType
 import click
 import os
 import glob
 
 
-def delete_images(
-    folder: Path, os_module: ModuleType = os, glob_module: ModuleType = glob
-):
+def delete_images(folder: Path) -> int:
     """
     Delete all .png and .jpg files in a folder and its subfolders.
 
     Args:
         folder (str): The folder to delete the images from.
-        os_module (ModuleType): The module to use for os operations.
-        glob_module (ModuleType): The module to use for glob operations.
 
     Returns:
         int: The number of files deleted.
     """
-    if os_module.path.isdir(str(folder)):
+    if os.path.isdir(str(folder)):
         files_deleted = 0
         for file_format in ["*.png", "*.jpg"]:
             pattern = str(Path(folder, "**", file_format))
-            files = glob_module.glob(pattern, recursive=True)
+            files = glob.glob(pattern, recursive=True)
             for file in files:
-                os_module.remove(file)
+                os.remove(file)
                 files_deleted += 1
         return files_deleted
     else:

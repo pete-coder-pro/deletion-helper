@@ -1,15 +1,12 @@
-import os
 from pathlib import Path
 import random
 import re
-from typing import List
 import pytest
-from pytest_mock import MockerFixture
 from deletion_helper.deletion_helper import delete_images
 
 
 @pytest.fixture
-def setup_files(tmp_path: Path):
+def test_folder(tmp_path: Path):
     """
     Create 20 files with random extensions in a temporary directory.
 
@@ -24,49 +21,34 @@ def setup_files(tmp_path: Path):
         with open(filepath, "w") as f:
             f.write("content")
         files.append(str(f))
-    return files
+    return tmp_path
 
 
-def test_deletion_helper(setup_files: List[str], mocker: MockerFixture):
+def test_deletion_helper(test_folder: Path) -> None:
     """
     Test that deletion_helper deletes all .png and .jpg files in a folder
     and its subfolders.
 
     Args:
-        setup_files (list): A list of files to be deleted.
-        mocker (pytest_mock.plugin.MockerFixture): A pytest mocker fixture.
+        test_folder (Path): The temporary directory with the test files.
     """
-    isdir_mock = mocker.patch("os.path.isdir")
-    glob_mock = mocker.patch("glob.glob")
-    remove_mock = mocker.patch("os.remove")
 
-    isdir_mock.return_value = True
+    # Create a list of files to be deleted
+    images_count = 0
+    for f in test_folder.glob("**/*"):
+        if f.suffix == ".png" or f.suffix == ".jpg":
+            images_count += 1
 
-    # Fix the side effect to match the pattern correctly
-    glob_mock.side_effect = lambda pattern, **kwargs: [
-        f
-        for f in setup_files
-        if os.path.basename(f).endswith(tuple(pattern.split("/")[-1].split(".")[1:]))
-    ]
+    deleted_images_count = delete_images(test_folder)
 
-    deletion_helper_calls = []
-    remove_mock.side_effect = lambda x: deletion_helper_calls.append(x)
-
-    expected_deletion_count = len(
-        [f for f in setup_files if f.endswith(".png") or f.endswith(".jpg")]
-    )
-
-    folder = Path("/any/folder")
-    delete_images(folder)
-
-    assert len(deletion_helper_calls) == expected_deletion_count
+    assert images_count == deleted_images_count
 
 
-def test_non_existing_folder(mocker):
-    isdir_mock = mocker.patch("os.path.isdir")
-
-    isdir_mock.return_value = False
-
+def test_non_existing_folder() -> None:
+    """
+    Test that deletion_helper raises a FileNotFoundError if the provided
+    folder does not exist.
+    """
     folder = Path("/non/existent/folder")
     with pytest.raises(
         FileNotFoundError,
